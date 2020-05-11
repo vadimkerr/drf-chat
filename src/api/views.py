@@ -13,6 +13,8 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        
+        # list only those messages that are related to current user
         return Message.objects.filter(Q(sender=user) | Q(receiver=user))
 
     def get_serializer_class(self):

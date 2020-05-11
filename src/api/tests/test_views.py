@@ -8,8 +8,9 @@ from api.models import Message
 
 class BaseMessageTestCase(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="user", password="test_password")
+        # create two users and clients for them
 
+        self.user = User.objects.create_user(username="user", password="test_password")
         self.other_user = User.objects.create_user(
             username="other_user", password="test_password"
         )
@@ -41,6 +42,14 @@ class MessageCreateTestCase(BaseMessageTestCase):
         message = Message.objects.get()
         self.assertEqual(message.sender, self.user)
 
+    def test_create_message_with_empty_text(self):
+        response = self.client.post(
+            self.url, {"receiver": self.other_user.pk, "text": ""}
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    # make sure that sender from request body is not used,
+    # since sender is determined by authentication
     def test_neglect_sender(self):
         response = self.client.post(
             self.url,
@@ -77,6 +86,7 @@ class MessageListTestCase(BaseMessageTestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    # check that user sees only relevant messages
     def test_list_only_user_messages(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -108,6 +118,7 @@ class MessageRetrieveTestCase(BaseMessageTestCase):
 
         self.assertEqual(response.data["text"], "test message")
 
+    # check that user can't see messages not relevant to him
     def test_retreive_not_sender_or_receiver(self):
         response = self.other_client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -133,11 +144,14 @@ class MessageUpdateTestCase(BaseMessageTestCase):
         message = Message.objects.get()
         self.assertEqual(message.text, "New message text")
 
+    # check that only sender can update the message
     def test_update_not_sender(self):
         response = self.other_client.patch(self.url, {"text": "New message text"})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_sender_not_changed(self):
+    # make sure that sender from request body is not used,
+    # since sender is determined by authentication
+    def test_neglect_sender(self):
         response = self.client.patch(self.url, {"sender": self.other_user.pk})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -164,6 +178,7 @@ class MessageDeleteTestCase(BaseMessageTestCase):
 
         self.assertIs(Message.objects.all().exists(), False)
 
+    # check that only sender can delete the mesage
     def test_delete_not_sender(self):
         response = self.other_client.delete(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
