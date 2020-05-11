@@ -3,13 +3,13 @@ from rest_framework import viewsets
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 
 from .models import Message
-from .permissions import IsReceiver, IsSender
+from .permissions import IsSenderOrReceiver
 from .serializers import MessageSerializer, MessageWriteSerializer
 
 
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
-    permission_classes = [IsAuthenticated & (IsSender | IsReceiver)]
+    permission_classes = [IsAuthenticated, IsSenderOrReceiver]
 
     def get_queryset(self):
         user = self.request.user

@@ -11,4 +11,4 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.id}: {self.sender} -> {self.receiver}: {self.text[:20]}..."
+        return f"{self.pk}: {self.sender} -> {self.receiver}: {self.text[:20]}..."
