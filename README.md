@@ -79,14 +79,19 @@ ___
 
 
 **View particular message:** `GET /api/messages/<pk:int>/`
+
+This action is allowed if you are sender or receiver of the message. 
 ___
 
 
 **Update the message:** `PUT/PATCH /api/messages/<pk:int>/ {receiver:int, text:str}`
+
+This action is allowed if you are sender of the message.
 ___
 
-
 **Delete the message:** `DELETE /api/messages/<pk:int>/`
+
+This action is allowed if you are sender of the message.
 ___
 
 
