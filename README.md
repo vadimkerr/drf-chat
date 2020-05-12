@@ -53,7 +53,7 @@ See all the messages that are relevant for you (you are either sender or receive
 
 Example response:
 ```json
-    {
+    [{
         "id": 1,
         "text": "hi there!",
         "created_at": "2020-05-11T20:02:43.680950+03:00",
@@ -73,7 +73,7 @@ Example response:
         "created_at": "2020-05-11T20:03:40.921901+03:00",
         "sender": 1,
         "receiver": 1
-    }
+    }] 
 ```
 ___
 
