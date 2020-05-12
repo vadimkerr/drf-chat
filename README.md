@@ -57,22 +57,22 @@ Example response:
         "id": 1,
         "text": "hi there!",
         "created_at": "2020-05-11T20:02:43.680950+03:00",
+        "sender": 1,
+        "receiver": 2
+    },
+    {
+        "id": 2,
+        "text": "hello",
+        "created_at": "2020-05-11T20:03:02.434049+03:00",
         "sender": 2,
         "receiver": 1
     },
     {
-        "id": 2,
-        "text": "my little message",
-        "created_at": "2020-05-11T20:03:02.434049+03:00",
-        "sender": 1,
-        "receiver": 2
-    },
-    {
         "id": 3,
-        "text": "hello",
+        "text": "do not forget to buy some butter",
         "created_at": "2020-05-11T20:03:40.921901+03:00",
         "sender": 1,
-        "receiver": 2
+        "receiver": 1
     }
 ```
 ___
